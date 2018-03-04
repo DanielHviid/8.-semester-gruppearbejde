@@ -147,7 +147,7 @@ acc <- function(x, y) {
 smoothImage <- function(grayImg){ # This function is run in loadSinglePersonsData check the code
   kernel <- makeBrush(9, shape='Gaussian', step=TRUE, sigma=1.8) # There exist a number of different functions
   
-  print(kernel) # just to show what we have made
+  #print(kernel) # just to show what we have made
   smoothed <- filter2(grayImg, kernel) # filter the image using the kernel
   return(smoothed)
 }
@@ -155,16 +155,21 @@ smoothImage <- function(grayImg){ # This function is run in loadSinglePersonsDat
 
 
 
-# Example code for reading all images into a list, DPI 100
-getAllData <- function(dataList){
+# code for reading all images into a list
+getAllData <- function(dataList, DPI){
   id <- data.frame()
   idList <- list()
+  # foreach(i=1:10) %dopar% {
+  #   
+  #   #loop contents here
+  #   
+  # }
   for(i in 1:length(dataList))
   {
     if( length(dataList[[i]]) > 0  ){
       for(j in 1:length(dataList[[i]])){
-        
-        idTemp <- loadSinglePersonsData(100,i - 1,j,folder)
+        cat("i: ", i, "j: ", j, "\n")
+        idTemp <- loadSinglePersonsData(DPI,i - 1,j,folder)
         idList <- append(idList, list(idTemp))
       }
     }

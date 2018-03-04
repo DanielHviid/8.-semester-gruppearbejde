@@ -13,3 +13,4 @@ library("caret")
 #library("RSNNS")
 #install.packages("neuralnet")
 
+library(foreach) #paralell for loop
