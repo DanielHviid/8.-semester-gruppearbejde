@@ -10,19 +10,20 @@ source('functions.R')
 #load dataset
 source('convertImages.R') # run only once
 
-source('loadImages.R') # load the converted images
+source('loadImages.R')    # load the converted images
 
 # Perform exercises
-source(paste(ProjectLocation, 'Opgave1_1.R', sep=""))
-source(paste(ProjectLocation, 'Opgave1_2.R', sep=""))
-source(paste(ProjectLocation, 'Opgave1_3.R', sep=""))
+source('Opgave1_1.R')
+source('Opgave1_2.R')
+source('Opgave1_3.R')
 
 
-source(paste(ProjectLocation, 'Opgave2_1.R', sep=""))
+source('Opgave2_1.R')
 
 
-source(paste(ProjectLocation, 'Opgave3_1.R', sep=""))
-source(paste(ProjectLocation, 'Opgave3_2.R', sep=""))
-source(paste(ProjectLocation, 'Opgave3_3.R', sep=""))
-source(paste(ProjectLocation, 'Opgave3_4.R', sep=""))
-source(paste(ProjectLocation, 'Opgave3_5.R', sep=""))
+source('Opgave3_1.R')
+source('Opgave3_2.R')
+source('Opgave3_3.R')
+source('Opgave3_4.R')
+source('Opgave3_5.R')
+
