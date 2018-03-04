@@ -4,8 +4,11 @@
 #source('Aflevering_2/Setup_Haraldson.R', chdir = TRUE)
 
 #load relevant functions
-source(paste(ProjectLocation, 'loadImage.R', sep=""))
+source(paste(ProjectLocation, 'includes.R', sep=""))
 source(paste(ProjectLocation, 'functions.R', sep=""))
+
+#load dataset
+source(paste(ProjectLocation, 'loadImages.R', sep=""))
 
 
 # Perform exercises
