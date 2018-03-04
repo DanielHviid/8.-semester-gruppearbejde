@@ -174,5 +174,11 @@ getAllData <- function(dataList, DPI){
       }
     }
   }
-  return(idList)
+  id <- list()
+  for(i in 1:length(idList)){
+    id <- rbind(id, data.frame( idList[i]))
+  }
+  
+  return(id)
 }
+
