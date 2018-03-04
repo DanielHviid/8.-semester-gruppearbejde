@@ -8,9 +8,9 @@ source('includes.R')
 source('functions.R')
 
 #load dataset
-source('convertImages.R')
+source('convertImages.R') # run only once
 
-source('loadImages.R')
+source('loadImages.R') # load the converted images
 
 # Perform exercises
 source(paste(ProjectLocation, 'Opgave1_1.R', sep=""))
