@@ -2,8 +2,10 @@
 
 
 ProjectLocation <- '~/Desktop/8.-semester-gruppearbejde/MachineLearning/Aflevering_2/'
-folder <- "/home/daniel/Desktop/trunk/2018/group"
+setwd(ProjectLocation)
 
+folder <- "/home/daniel/Desktop/trunk/2018/group"
+folder <- "/home/daniel/Desktop/trunk/preProcessed/2018/group"
 
 
 # ------------------------------- Windows (Desktop)   ------------------------------------------ 
