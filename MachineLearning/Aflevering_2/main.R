@@ -1,6 +1,7 @@
 
 
 #setup paths for the mashine in use
+#Run your own setup file before the code below
 #source('Aflevering_2/Setup_Haraldson.R', chdir = TRUE)
 
 #load relevant functions
