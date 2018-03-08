@@ -9,7 +9,7 @@ source('includes.R')
 source('functions.R')
 
 #load dataset
-source('convertImages.R') # run only once
+# source('convertImages.R') # run only once
 
 source('loadImages.R')    # load the converted images
 
