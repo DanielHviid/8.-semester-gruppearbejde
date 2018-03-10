@@ -18,15 +18,7 @@ folds = createFolds(id100Small)
 # outputData @ list(training, test, validation)
 #-------------------------------------------------------------
 trainingSplitVertical <- function(y, Nfolds = 10, NTestSize = 1, NValidationSize = 0){
-  
-  
-  # #for debugging
-   y <-id100Small
-   Nfolds <- 10
-   NTestSize <- 1;
-   NValidationSize <- 0;
-  
-  
+
   #Preconditions 
   if(nrow(y) %% Nfolds !=0){
     print("invallid input folds not a multible of imput array")
