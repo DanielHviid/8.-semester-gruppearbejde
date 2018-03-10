@@ -218,3 +218,174 @@ getAcceptableVarianceRotationalMatrix <- function(data, leastVariance)
   
 }
 
+#-------------------------------------------------------------
+#Vertical split of test data
+# y @ input dataframe
+# outputData @ list(training, test, validation)
+#-------------------------------------------------------------
+trainingSplitVertical <- function(y, Nfolds = 10, NTestSize = 1, NValidationSize = 0){
+  
+  #Preconditions 
+  if(nrow(y) %% Nfolds !=0){
+    print("invallid input folds not a multible of imput array")
+    return(list())
+  }
+  if (NTestSize <1 || NTestSize > Nfolds - 1){
+    print("invallid input for Test set")
+    return(list())
+  }
+  if (NValidationSize < 0 || NValidationSize > Nfolds - 1){
+    print("invallid input for vallidation set")
+    return(list())
+  }
+  if (NValidationSize + NTestSize >= Nfolds){
+    print("invallid input out of bounce")
+    return(list())
+  }
+  
+  
+  # split and shuffle 
+  folds <- createFolds(y$X1, k = Nfolds)
+  
+  #construct the dataPackage for outputData
+  TeFolds <- folds[[1:NTestSize]]
+  VaFolds <- folds[[NTestSize:(NTestSize+NValidationSize)]]
+  TrFolds <- folds[[1:(NTestSize+NValidationSize)]]
+  
+  test <- y[TeFolds,]
+  validation <- y[VaFolds,]
+  training <- y[-TrFolds,]
+  
+  
+  
+  if(NValidationSize == 0){
+    print("test1")
+    validation <- data.frame()
+  }
+  if(NTestSize == 0){
+    test <- data.frame()
+  }
+  
+  #return data  
+  outputData = list(training, test, validation)
+  
+  
+  return(outputData)
+}
+
+#-------------------------------------------------------------
+# splits every person into test, training and validation
+#-------------------------------------------------------------
+allPersonsInSplit <- function(input, Nfolds = 10, NTestSize = 1, NValidationSize = 0)
+{
+  testData <- input[sample(nrow(input)),]
+  
+  N = length(testData[,1])
+  testIndex = NTestSize*N/Nfolds
+  validationIndex = testIndex + NValidationSize*N/Nfolds
+  test <- testData[1:testIndex,]
+  if (NValidationSize != 0)
+  {
+    validation <- testData[(testIndex+1):validationIndex,]
+  } else
+  {
+    validation <- NULL
+  }
+  
+  training <- testData[-(1:validationIndex),]
+  
+  return(list(test,training, validation))
+}
+
+#-------------------------------------------------------------
+# Creates a split of data to be used with cross validation
+#-------------------------------------------------------------
+allPersonsInCross <- function(input, Nfolds = 10)
+{
+  testData <- input[sample(nrow(input)),]
+  
+  result = list()
+  
+  N = length(testData[,1])
+  
+  
+  
+  for (i in 1:Nfolds)
+  {
+    start = N/Nfolds * (i-1) + 1
+    end = N/Nfolds * i
+    result[[i]] = testData[start:end,]
+  }
+  
+  return(result)
+}
+
+#-------------------------------------------------------------
+# splits persons into test, training and validation
+#-------------------------------------------------------------
+disjunctSplit <- function(input, Nfolds = 10, NTestSize = 1, NValidationSize = 0)
+{
+  testData <- input[sample(nrow(input)),]
+  
+  N = length(testData[,1])
+  testIndex = NTestSize*N/Nfolds
+  validationIndex = testIndex + NValidationSize*N/Nfolds
+  test <- testData[1:testIndex,]
+  if (NValidationSize != 0)
+  {
+    validation <- testData[(testIndex+1):validationIndex,]
+  } else
+  {
+    validation <- NULL
+  }
+  
+  training <- testData[-(1:validationIndex),]
+  
+  return(list(test,training, validation))
+}
+
+
+#-------------------------------------------------------------
+# splits persons into cross validations
+#-------------------------------------------------------------
+disjunctCross <- function(input, Nfolds = 10)
+{
+  testData <- input[sample(nrow(input)),]
+  
+  result = list()
+  
+  N = length(testData[,1])
+  
+  for (i in 1:Nfolds)
+  {
+    start = N/Nfolds * (i-1) + 1
+    end = N/Nfolds * i
+    result[[i]] = testData[start:end,]
+  }
+  
+  return(result)
+  
+}
+
+
+#-------------------------------------------------------------
+# shuffle person position in data
+#-------------------------------------------------------------
+shufflePersons <- function(input, Npersons = length(input[,1])/4000)
+{
+  result = list()
+  
+  N = length(testData[,1])
+  
+  for (i in 1:Npersons)
+  {
+    start = N/Npersons * (i-1) + 1
+    end = N/Npersons * i
+    result[[i]] = testData[start:end,]
+  }
+  
+  result = rbindlist(sample(result))
+  
+  return(result)
+}
+
