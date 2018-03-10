@@ -15,13 +15,20 @@ id$X1 <- factor(id$X1)
 
 pca <- prcomp(id[,-1], scale = FALSE, center = TRUE )
 
-
-for (i in c(1,401,801,1201,1601,2001,2401,2801,3201,3601)){
-  trunc <- pca$x[i,1:getNumberOfPrincipleComponents(pca,0.80)] %*% t(pca$rotation[,1:getNumberOfPrincipleComponents(pca,0.80)])
+for (j in c(0.80, 0.90, 0.95)){
+  for (i in c(1,401,801,1201,1601,2001,2401,2801,3201,3601)){
+  dimensions <- getNumberOfPrincipleComponents(pca,j)
+  trunc <- pca$x[i,1:dimensions] %*% t(pca$rotation[,1:dimensions])
   trunc <- scale(trunc, center = -1 * pca$center, scale=FALSE)
   
   imageSize <- sqrt(ncol(id) - 1)
   imageM <- matrix( trunc,nrow = imageSize,ncol = imageSize,byrow = FALSE)
   imageM <- rotate(imageM,-90) # rotate is a function to rotate the image
   image( imageM, col = gray(seq(0, 1, length = 256)) )
+  
+  }
+  print(dimensions) # dimensions of our reduced data set.
 }
+
+
+

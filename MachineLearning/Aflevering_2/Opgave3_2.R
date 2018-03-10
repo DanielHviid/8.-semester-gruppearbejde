@@ -21,10 +21,11 @@ for(i in 1:10) {
   imageSize <- sqrt(ncol(id) - 1)
   imageM <- matrix( pca$rotation[,i],nrow = imageSize,ncol = imageSize,byrow = FALSE)
   imageM <- rotate(imageM,-90) # rotate is a function to rotate the image
-  image( imageM , col = gray(seq(0, 1, length = 256)))
+  image( imageM, col = gray(seq(0, 1, length = 256)))
+ # print(imageM)
 }
 
-idmean <- colMeans(id[,-1])
+idmean <- colMeans(id[1:400,-1])
 imageM <- matrix( idmean,nrow = imageSize,ncol = imageSize,byrow = FALSE)
 imageM <- rotate(imageM,-90) # rotate is a function to rotate the image
 image( imageM , col = gray(seq(0, 1, length = 256)))
