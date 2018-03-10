@@ -39,6 +39,21 @@ getAcceptableVarianceRotationalMatrix <- function(data, leastVariance)
 }
 
 
+#-------------------------------------------------------------
+# Get the number of principle components required to account forat least the level of variance selected (0 to 1).'
+# Returns a number, input is : (matrix/dataframe, number)
+#-------------------------------------------------------------
+getNumberOfPrincipleComponents <- function(model, leastVariance)
+{
+  variance <- model$sdev
+  variance <- variance / sum(variance)
+  
+  cumulativeVariance <- cumsum(variance)
+  
+  acceptableFactorVariances <- variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariance])+1)]
+  return(length(acceptableFactorVariances))
+}
+
 #res <- prcomp(id100Small)
 #summary(res)
 
