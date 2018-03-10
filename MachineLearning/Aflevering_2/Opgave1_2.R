@@ -3,9 +3,17 @@
 #--------------- Opgave 2.1.1.2
 #--------------------------------------------
 
-data = trainingSplitVertical(id100Small)
-training = data[[1]]
-length(training)
+for (data in list(allPersonsInSplit(id100Small), disjunctSplit(id100Small)))
+{
+  
+}
+
+
+ting = allPersonsInSplit(id100Small)
+training = ting[[1]]
+test = ting[[2]]
+training
+test
 
 model <- prcomp(id100Small, center = TRUE, scale = TRUE)
 

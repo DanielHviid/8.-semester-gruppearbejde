@@ -294,7 +294,7 @@ allPersonsInSplit <- function(input, Nfolds = 10, NTestSize = 1, NValidationSize
   
   training <- testData[-(1:validationIndex),]
   
-  return(list(test,training, validation))
+  return(list(training, test, validation))
 }
 
 #-------------------------------------------------------------
@@ -341,7 +341,7 @@ disjunctSplit <- function(input, Nfolds = 10, NTestSize = 1, NValidationSize = 0
   
   training <- testData[-(1:validationIndex),]
   
-  return(list(test,training, validation))
+  return(list(training, test, validation))
 }
 
 
