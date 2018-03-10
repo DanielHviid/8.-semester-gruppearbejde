@@ -22,6 +22,12 @@ model <- prcomp(trainingData)
 
 leastVariances = list(0.8,0.9,0.95,0.99)
 
+listOfAccuracies <- matrix(,4,3)
+listOfTimes <- matrix(,4,3)
+listOfTimeVariation <- matrix(,4,3)
+listOfNPCs <- matrix(,4,1)
+timeSamples <- matrix(,10,1)
+
 for (i in 1:length(leastVariances))
 {
   variance = model$sdev
@@ -31,19 +37,36 @@ for (i in 1:length(leastVariances))
   
   acceptableFactorVariances = variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariances[i]])+1)]
   NAcceptable = length(acceptableFactorVariances)
+  listOfNPCs[i] = NAcceptable
 
-  reducedTraining <- data.matrix(training) %*% data.matrix(model$rotation[,1:NAcceptable])
+  reducedTraining <- data.frame(data.matrix(trainingData) %*% data.matrix(model$rotation[,1:NAcceptable]))
+  reducedTest <- data.frame(data.matrix(testData) %*% data.matrix(model$rotation[,1:NAcceptable]))
  
+  cat("Number of principle components: ", NAcceptable, "\n")
+  kValues <- list(1,10,100)
+  for (K in 1:length(kValues))
+  {
+    
+    for (j in 1:10)
+    {
+      start.time <- Sys.time()
+      test_pred <- knn(train = reducedTraining, test = reducedTest, cl = trainingClasses, k=kValues[K])
+      end.time <- Sys.time()
+      timeSamples[j] <- end.time - start.time
+    }
+    
+    listOfTimes[i,K] <- mean(timeSamples)
+    listOfTimeVariation[i,k] <- sd(timeSamples)
+    
+    #resultMatrix = CrossTable(x = testClasses, y = test_pred, prop.chisq=FALSE, prop.r = FALSE, prop.c = FALSE, prop.t = FALSE);
+    #result = sum(diag(resultMatrix$t))/sum(resultMatrix$t)
+    
+    listOfAccuracies[i,K] <- acc(test_pred,testClasses)
+  }
+  
 }
-# 
-# getAcceptableVarianceRotationalMatrix(model, 0)
-# 
-# plot(model$sdev, type = "o")
-# 
-# variance <- model$sdev^2
-# variance <- variance / sum(variance)
-# plot(variance, ylim = c(0,1), type = "o")
-# 
-# cumulativeVariance <- cumsum(variance)
-# plot(cumulativeVariance, ylim = c(0,1), type = "o")
 
+print(listOfAccuracies)
+print(listOfTimes)
+print(listOfTimeVariation)
+print(listOfNPCs)
