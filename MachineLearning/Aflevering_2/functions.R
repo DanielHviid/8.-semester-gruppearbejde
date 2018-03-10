@@ -201,17 +201,17 @@ getNumberOfPrincipleComponents <- function(model, leastVariance)
 # Get the rotation matrix corrosponding to at least the level of variance selected (0 to 1).'
 # Returns a matrix, input is : (matrix/dataframe , number)
 #-------------------------------------------------------------
-getAcceptableVarianceRotationalMatrix <- function(data, leastVariance)
+getAcceptableVarianceRotationalMatrix <- function(input, leastVariance)
 {
-  model <- prcomp(data, scale = TRUE, center = TRUE)
+  model = prcomp(input)
   
-  variance <- model$sdev
-  variance <- variance / sum(variance)
+  variance = model$sdev
+  variance = variance / sum(variance)
   
-  cumulativeVariance <- cumsum(variance)
+  cumulativeVariance = cumsum(variance)
   
-  acceptableFactorVariances <- variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariance])+1)]
-  NAcceptable <- length(acceptableFactorVariances)
+  acceptableFactorVariances = variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariance])+1)]
+  NAcceptable = length(acceptableFactorVariances)
   
   
   return (model$rotation[,1:NAcceptable])

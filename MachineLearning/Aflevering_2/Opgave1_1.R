@@ -17,15 +17,15 @@ plot(cumulativeVariance[1:20], ylim = c(0,1), type = "o")
 
 
 
-# 
-# # 
+
+#
 # # N = 10
-# # 
+# #
 # # dataList <- trainingSplit(data,N,1,0,true) # number of folds, size of test set, size of validation set, shuffle
-# # 
+# #
 # # training <- dataList[1]
 # # test <- dataList[2]
-# # 
+# #
 # # model <- prComp(training)
 # # model.sdev
 # # bitplot(model)
@@ -65,6 +65,6 @@ plot(cumulativeVariance[1:20], ylim = c(0,1), type = "o")
 # NAcceptable <- length(acceptableFactorVariances)
 # 
 # plot(cumsum(acceptableFactorVariances), ylim = c(0,1), type = "o")
-#   
+# 
 # getAcceptableVarianceRotationalMatrix(USArrests, 0.8)
 
