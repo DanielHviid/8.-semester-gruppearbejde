@@ -188,7 +188,7 @@ getAllData <- function(dataList, DPI){
 #-------------------------------------------------------------
 getNumberOfPrincipleComponents <- function(model, leastVariance)
 {
-  variance <- model$sdev
+  variance <- model$sdev^2
   variance <- variance / sum(variance)
   
   cumulativeVariance <- cumsum(variance)
