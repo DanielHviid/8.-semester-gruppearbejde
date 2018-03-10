@@ -182,3 +182,24 @@ getAllData <- function(dataList, DPI){
   return(id)
 }
 
+#-------------------------------------------------------------
+# Get the rotation matrix corrosponding to at least the level of variance selected (0 to 1).'
+# Returns a matrix, input is : (matrix/dataframe , number)
+#-------------------------------------------------------------
+getAcceptableVarianceRotationalMatrix <- function(data, leastVariance)
+{
+  model <- prcomp(data, scale = TRUE, center = TRUE)
+  
+  variance <- model$sdev
+  variance <- variance / sum(variance)
+  
+  cumulativeVariance <- cumsum(variance)
+  
+  acceptableFactorVariances <- variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariance])+1)]
+  NAcceptable <- length(acceptableFactorVariances)
+  
+  
+  return (model$rotation[,1:NAcceptable])
+  
+}
+
