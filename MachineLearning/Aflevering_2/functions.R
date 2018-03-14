@@ -389,3 +389,16 @@ shufflePersons <- function(input, Npersons = length(input[,1])/4000)
   return(result)
 }
 
+
+#-------------------------------------------------------------
+# Apply znorm on dataframe
+#-------------------------------------------------------------
+znormalize <- function(input)
+{
+  result = data.matrix(input)
+  cols = ncol(result)
+  rows = nrow(result)
+  
+  return (data.frame(matrix(znorm(result),rows,cols)))
+}
+

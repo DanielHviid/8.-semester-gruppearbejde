@@ -1,174 +1,99 @@
+
 #--------------------------------------------
-#--------------- Opgave 2.1.1.1 del 1
+#--------------- Opgave 2.2.1 a - pre normalization
 #--------------------------------------------
 
-folds = createFolds(id100Small)
+data = allPersonsInCross(id100Small)
 
+listOfAccuracies <- matrix(,1,10)
+listOfNPCs <- matrix(,1,10)
 
+K = 3
 
-
-
-
-
-
-
-#-------------------------------------------------------------
-#Vertical split of test data
-# y @ input dataframe
-# outputData @ list(training, test, validation)
-#-------------------------------------------------------------
-trainingSplitVertical <- function(y, Nfolds = 10, NTestSize = 1, NValidationSize = 0){
-
-  #Preconditions 
-  if(nrow(y) %% Nfolds !=0){
-    print("invallid input folds not a multible of imput array")
-    return(list())
-  }
-  if (NTestSize <1 || NTestSize > Nfolds - 1){
-    print("invallid input for Test set")
-    return(list())
-  }
-  if (NValidationSize < 0 || NValidationSize > Nfolds - 1){
-    print("invallid input for vallidation set")
-    return(list())
-  }
-  if (NValidationSize + NTestSize >= Nfolds){
-    print("invallid input out of bounce")
-    return(list())
-  }
-    
-
-  # split and shuffle 
-  folds <- createFolds(y$X1, k = Nfolds)
-
-  #construct the dataPackage for outputData
-  TeFolds <- folds[[1:NTestSize]]
-  VaFolds <- folds[[NTestSize:(NTestSize+NValidationSize)]]
-  TrFolds <- folds[[1:(NTestSize+NValidationSize)]]
+for (i in 1:10)
+{
+  training = rbindlist(data[-i])
+  test = data[[i]]
+  trainingClasses = training[,1]
+  trainingData = znormalize(training[,-1])
+  testClasses = test[,1]
+  testData = znormalize(test[,-1])
   
-  test <- y[TeFolds,]
-  validation <- y[VaFolds,]
-  training <- y[-TrFolds,]
+  model <- prcomp(trainingData)
   
+  leastVariance = 0.95
+
+  variance = model$sdev
+  variance = variance / sum(variance)
   
+  cumulativeVariance = cumsum(variance)
   
-  if(NValidationSize == 0){
-    print("test1")
-    validation <- data.frame()
-  }
-  if(NTestSize == 0){
-    test <- data.frame()
-  }
+  acceptableFactorVariances = variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariance])+1)]
+  NAcceptable = length(acceptableFactorVariances)
+  listOfNPCs[i] = NAcceptable
   
-  #return data  
-  outputData = list(training, test, validation)
+  reducedTraining <- data.frame(data.matrix(trainingData) %*% data.matrix(model$rotation[,1:NAcceptable]))
+  reducedTest <- data.frame(data.matrix(testData) %*% data.matrix(model$rotation[,1:NAcceptable]))
   
-  
-  return(outputData)
+  cat("Number of principle components: ", NAcceptable, "\n")
+
+  test_pred <- knn(train = reducedTraining, test = reducedTest, cl = t(trainingClasses), k=K)
+
+  listOfAccuracies[i] <- acc(test_pred,testClasses)
 }
 
-# debugging af funktionen
-test <- trainingSplitVertical(id100Small, Nfolds = 10, NTestSize = 1, NValidationSize = 0)
 
-nrow(test[[1]])
-nrow(test[[2]])
-nrow(test[[3]])
+write(listOfAccuracies,"2-1-a-accuracies.txt")
+write(listOfNPCs,"2-1-a-npcs.txt")
 
 
-#-------------------------------------------------------------
-#Horisontal split of test data
-# y @ input dataframe
-# outputData @ list(training, test, validation)
-#-------------------------------------------------------------
-trainingSpliHorisontal <- function(inputData, NMembers = 20, Nfolds = 10, NTestSize = 1, NValidationSize = 0){
-  {
-  inputData <- id100Small
-  NMembers = 20
-  Nfolds = 10
-  NTestSize = 1
-  NValidationSize = 0
-  
-  #Preconditions 
-  if(nrow(inputData) %% Nfolds !=0){
-    print("invallid input folds not a multible of imput array")
-    return(list())
-  }
-  if (NTestSize <1 || NTestSize > Nfolds - 1){
-    print("invallid input for Test set")
-    return(list())
-  }
-  if (NValidationSize < 0 || NValidationSize > Nfolds - 1){
-    print("invallid input for vallidation set")
-    return(list())
-  }
-  if (NValidationSize + NTestSize >= Nfolds){
-    print("invallid input out of bounce")
-    return(list())
-  }
-  if(NMembers %% Nfolds != 0){
-    print("invallid input nfold is not a multible of nmembers")
-    return(list())
-  }
-  
-  
+#--------------------------------------------
+#--------------- Opgave 2.2.1 b - post normalization
+#--------------------------------------------
 
-  for (i in 0:9){
-    a <- (4000*i+1)
-    b <- (4000*(i+1))
-    folds[i+1] <-inputData[a:b,]
-    i <- i+1
-  }
-  
-  folds <- c(1:Nfolds)
-  shuffledFoldes <- sample(folds)
-  
-  
-  
-  
-  
+data = allPersonsInCross(id100Small)
 
-  #construct the dataPackage for outputData
-  TeFolds <- shuffledFoldes[1:NTestSize]
-  VaFolds <- shuffledFoldes[[NTestSize:(NTestSize+NValidationSize)]]
-  TrFolds <- shuffledFoldes[[1:(NTestSize+NValidationSize)]]
+
+listOfAccuracies <- matrix(,1,10)
+listOfNPCs <- matrix(,1,10)
+
+K = 3
+
+for (i in 1:10)
+{
+  training = rbindlist(data[-i])
+  test = data[[i]]
+  trainingClasses = training[,1]
+  trainingData = training[,-1]
+  testClasses = test[,1]
+  testData = test[,-1]
   
-  test <- y[,]
-  validation <- y[VaFolds,]
-  training <- y[-TrFolds,]
+  model <- prcomp(trainingData)
   
+  leastVariance = 0.95
   
+  variance = model$sdev
+  variance = variance / sum(variance)
   
-  if(NValidationSize == 0){
-    print("test1")
-    validation <- data.frame()
-  }
-  if(NTestSize == 0){
-    test <- data.frame()
-  }
+  cumulativeVariance = cumsum(variance)
   
-  #return data  
-  outputData = list(training, test, validation)
-  }
+  acceptableFactorVariances = variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariance])+1)]
+  NAcceptable = length(acceptableFactorVariances)
+  listOfNPCs[i] = NAcceptable
   
-  return(outputData)
+  reducedTraining <- znormalize(data.frame(data.matrix(trainingData) %*% data.matrix(model$rotation[,1:NAcceptable])))
+  reducedTest <- znormalize(data.frame(data.matrix(testData) %*% data.matrix(model$rotation[,1:NAcceptable])))
+  
+  cat("Number of principle components: ", NAcceptable, "\n")
+  
+  test_pred <- knn(train = reducedTraining, test = reducedTest, cl = t(trainingClasses), k=K)
+  
+  listOfAccuracies[i] <- acc(test_pred,testClasses)
 }
 
-# code from the web
-splitter<-function(y,groups=10){
-  outputData <- vector("list", groups)
-  
-  
-  y$split<-sample(groups,size=nrow(y),replace=T)
-  for(i in 1:groups){
-    ddd<-y[y$split==i,]
-    outputData[[i]] <- ddd
-  }
-  return(outputData)
-}
 
-test = splitter(id100Small,10)
-
-
+write(listOfAccuracies,"2-1-b-accuracies.txt")
+write(listOfNPCs,"2-1-b-npcs.txt")
 
 
 
