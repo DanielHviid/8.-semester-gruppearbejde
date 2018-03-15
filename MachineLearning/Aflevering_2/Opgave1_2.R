@@ -3,7 +3,7 @@
 #--------------- Opgave 2.1.1.2 a - all persons in
 #--------------------------------------------
 
-data = allPersonsInSplit(id100Small)
+data = allPersonsInSplit(id100Large)
 
 training = data[[1]]
 trainingClasses = training[,1]
@@ -32,17 +32,19 @@ for (i in 1:length(leastVariances))
   acceptableFactorVariances = variance[1:(length(cumulativeVariance[cumulativeVariance < leastVariances[i]])+1)]
   NAcceptable = length(acceptableFactorVariances)
   listOfNPCs[i] = NAcceptable
-
+  
   reducedTraining <- data.frame(data.matrix(trainingData) %*% data.matrix(model$rotation[,1:NAcceptable]))
   reducedTest <- data.frame(data.matrix(testData) %*% data.matrix(model$rotation[,1:NAcceptable]))
- 
+  
   cat("Number of principle components: ", NAcceptable, "\n")
   kValues <- list(1,10,100)
   for (K in 1:length(kValues))
   {
+    cat("K-Vakues: ", kValues[[K]], "\n")
     
     for (j in 1:10)
     {
+      cat("j-Vakues: ", j, "\n")
       start.time <- Sys.time()
       test_pred <- knn(train = reducedTraining, test = reducedTest, cl = trainingClasses, k=kValues[K])
       end.time <- Sys.time()
@@ -72,7 +74,7 @@ write(listOfNPCs,"1-2-a-NPCs.txt")
 #--------------- Opgave 2.1.1.2 b - disjunct
 #--------------------------------------------
 
-data = disjunctSplit(id100Small)
+data = disjunctSplit(id100Large)
 
 training = data[[1]]
 trainingClasses = training[,1]
@@ -109,9 +111,10 @@ for (i in 1:length(leastVariances))
   kValues <- list(1,10,100)
   for (K in 1:length(kValues))
   {
-    
+    cat("K-Vakues: ", kValues[[K]], "\n")
     for (j in 1:10)
     {
+      cat("j-Vakues: ", j, "\n")
       start.time <- Sys.time()
       test_pred <- knn(train = reducedTraining, test = reducedTest, cl = trainingClasses, k=kValues[K])
       end.time <- Sys.time()
@@ -133,3 +136,4 @@ write(listOfAccuracies,"1-2-b-accuracies.txt")
 write(listOfTimes,"1-3-b-times-means.txt")
 write(listOfTimeVariation,"1-2-b-times-stds.txt")
 write(listOfNPCs,"1-2-b-NPCs.txt")
+
