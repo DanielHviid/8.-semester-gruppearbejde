@@ -15,9 +15,7 @@ library("jmotif")
 #library("RSNNS")
 #install.packages("neuralnet")
 
-library(foreach) #paralell for loop
-library(doMC)
-registerDoMC(3)  #change the 2 to your number of CPU
+
 
 
 
