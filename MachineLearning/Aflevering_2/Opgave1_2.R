@@ -42,6 +42,7 @@ for (i in 1:length(leastVariances))
   {
     cat("K-Vakues: ", kValues[[K]], "\n")
     
+     
     for (j in 1:10)
     {
       cat("j-Vakues: ", j, "\n")
