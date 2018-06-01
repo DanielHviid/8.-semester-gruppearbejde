@@ -169,7 +169,7 @@ getAllData <- function(dataList, DPI){
     if( length(dataList[[i]]) > 0  ){
       for(j in 1:length(dataList[[i]])){
         cat("i: ", i, "j: ", j, "\n")
-        idTemp <- loadSinglePersonsData(DPI,i - 1,j,folder)
+        idTemp <- loadSinglePersonsData(DPI,i - 1,dataList[[i-1,j]],folder)
         idList <- append(idList, list(idTemp))
       }
     }
