@@ -1,0 +1,6 @@
+## Ignore R studio files
+
+# dataFrame files
+*.Rda
+.Rhistory
+.RData
